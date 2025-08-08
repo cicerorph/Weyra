@@ -1,12 +1,24 @@
-# veria
+# Weyra
 
-To install dependencies:
+
+## How to setup the project
+First, install the dependencies:
 
 ```bash
 bun install
 ```
 
-To run:
+After, copy the `.env.template` file to `.env`,
+```bash
+cp .env.template .env
+```
+
+and change it! (You can use your text editor of choice, for me its nano)
+```bash
+nano .env
+```
+
+And finally run it:
 
 ```bash
 bun run index.ts
