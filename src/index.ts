@@ -3,14 +3,14 @@ import { ActivityType, PresenceUpdateStatus } from 'seyfert/lib/types';
 import { RedisAdapter } from '@slipher/redis-adapter';
 
 const client = new Client({
-    gateway: {
+    gateway: { // Put the discord mobile status
         properties: {
             os: 'android',
             browser: 'Discord Android',
             device: 'android'
         }
     },
-    presence: (_shardId) => ({
+    presence: (_shardId) => ({ // presence, doesn't work well with the discord mobile status but it's a fallback
         status: PresenceUpdateStatus.Online,
         activities: [{
             name: "I'm Weyra, your friendly bot!",
@@ -25,10 +25,13 @@ const client = new Client({
         },
         reply: (_ctx) => true,
         deferReplyResponse: (_ctx) => ({ content: 'Please wait, processing your request...' })
-    }
+    },
+    allowedMentions: { // so the bot doesnt mention people
+        parse: [],
+    },
 });
 
-client.setServices({
+client.setServices({ // redis cache
     cache: {
         adapter: new RedisAdapter({
             redisOptions: {
@@ -39,11 +42,12 @@ client.setServices({
     }
 });
 
-// inicia o bot
+// starts the bot
 client.start()
   .then(() => {
     console.log(`Bot started as ${client.botId}`);
     return client.uploadCommands({ cachePath: './commands.json' });
   });
+
 
 export { client as sclient }; // export so we can use it in other files
